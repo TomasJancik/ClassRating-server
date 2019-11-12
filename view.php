@@ -32,13 +32,46 @@ while($row = $res->fetch_assoc()) {
 
 $data = isset($data[$dateToday]) ? $data[$dateToday] : $data[$dateYesterday];
 
-echo "<table border='1'><thead><tr><td>Time</td><td>😊</td><td>😐</td><td>😟</td></tr></thead>";
+echo <<< xxx
+<doctype !HTML>
+<html>
+<head>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.2/dist/Chart.min.js"></script>
+</head>
+<body>
+xxx;
+
+
+echo "<table border='1'><thead><tr><td>Time</td><td>😊</td><td>😐</td><td>😟</td></tr></thead>\n";
+$rowNum = 0;
 foreach ($data as $time => $values) {
-	echo "<tr>";
-	echo "<td>" . $time . "</td>";
-	echo "<td>" . $values[1] . "</td>";
-	echo "<td>" . $values[2] . "</td>";
-	echo "<td>" . $values[3] . "</td>";
-	echo "</tr>";
+	$rowNum++;
+	echo "<tr>\n";
+	echo "<td>" . $time . "</td>\n";
+	echo "<td>" . $values[1] . "</td>\n";
+	echo "<td>" . $values[2] . "</td>\n";
+	echo "<td>" . $values[3] . "</td>\n";
+	echo "<td><canvas id='r" . $rowNum . "'></canvas>\n";
+	echo '<script type="text/javascript">' . "\n";
+	echo 'var ctx = document.getElementById("r' . $rowNum . '").getContext("2d")' . "\n";
+	echo 'var chart = new Chart(ctx, {' . "\n";
+	echo "\t" . 'type: "pie",' . "\n";
+	echo "\t" . 'data: {labels: ["😊", "😐", "😟"],' . "\n";
+	echo "\t\t" . 'datasets: [{' . "\n";
+	echo "\t\t\t" . 'data: [' . $values[1] . ', ' . $values[2] . ', ' . $values[3] . '],' . "\n";
+	echo "\t\t\t" . 'backgroundColor: ["rgba(80, 220, 100, 1)", "rgba(248, 222, 126, 1)", "rgba(255, 8, 0, 1)"],' . "\n";
+	echo "\t}]"; // end of dataset
+
+	echo "}})\n";
+	echo "</script>\n";
+
+	echo "</td>\n";
+	echo "</tr>\n";
 }
+
+echo <<< xxx
+</body>
+</html>
+xxx;
+
 
