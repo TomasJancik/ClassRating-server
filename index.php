@@ -2,22 +2,6 @@
 require "config.php";
 $db = new mysqli("localhost", $db_user, $db_pass, $db_name);
 
-$ip = $_SERVER['REMOTE_ADDR'];
-$identifier = $_GET['macAddr'];
-$rating = $_GET['rating'];
-$data = json_encode($_GET);
-$now = date("Y-m-d H:i:s");
-
-$query = "INSERT INTO data (`from`, `identifier`, `rating`, `data`, `date`)" .
-		"SELECT ?, dev.id, ?, ?, now() " . 
-		"FROM device dev " . 
-		"WHERE dev.identifier = ?";
-
-if($stmt = $db->prepare($query)) {
-	$stmt->bind_param("ssss", $ip, $rating, $data, $identifier);
-	$stmt->execute();
-} else {
-	echo $db->error;
+if(isset($_GET['rating'])) {
+	require "save_rating.php";
 }
-
-echo $db->error;
